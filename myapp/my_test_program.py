@@ -1,6 +1,7 @@
 from os import getenv
 import sys
-import socket
+from socket import gethostbyname, gethostname 
+from pyspark.sql import SparkSession
 
 SPARK_MASTER= getenv('SPARK_MASTER','local[2]')
 SIZE_X = int(getenv('SIZE_X',10))
@@ -10,12 +11,9 @@ OUTPUT_DIR=getenv('OUTPUT_DIR')
 if(OUTPUT_DIR==None):
 	raise Exception('OUTPUT_DIR cannot be null');
 
-from pyspark.sql import SparkSession
-ip=socket.gethostbyname(socket.gethostname())
-
 spark = SparkSession.builder \
 	.appName("my_app") \
-	.config("spark.driver.host",ip) \
+	.config("spark.driver.host",gethostbyname(gethostname())) \
 	.master(SPARK_MASTER) \
 	.getOrCreate()
 
