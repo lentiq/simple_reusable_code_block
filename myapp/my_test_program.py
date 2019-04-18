@@ -1,4 +1,3 @@
-#!/usr/bin/python
 from os import getenv
 import sys
 import socket
