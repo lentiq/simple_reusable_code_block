@@ -2,6 +2,7 @@ from os import getenv
 import sys
 from socket import gethostbyname, gethostname 
 from pyspark.sql import SparkSession
+from pyspark.mllib.random import RandomRDDs
 
 SPARK_MASTER= getenv('SPARK_MASTER','local[2]')
 SIZE_X = int(getenv('SIZE_X',10))
@@ -16,10 +17,6 @@ spark = SparkSession.builder \
 	.config("spark.driver.host",gethostbyname(gethostname())) \
 	.master(SPARK_MASTER) \
 	.getOrCreate()
-
-#this program simply writes a random table to the data lake
-
-from pyspark.mllib.random import RandomRDDs
 
 data  = RandomRDDs.uniformVectorRDD(spark.sparkContext, SIZE_X, SIZE_Y).map(lambda a : a.tolist()).toDF()
 
